@@ -4,12 +4,73 @@ import './App.css';
 function App() {
   return (
     <div className="wrapper clear">
-      <header className="d-flex justify-between align-center">
+
+
+
+
+      <div className="overlay">
+        <div className="drawer">
+
+          <h2 className="mb-30">Cart</h2>
+
+
+          <div className="items">
+            <div className="cartItem d-flex align-center mb-20">
+              <div style={{ backgroundImage: "url(/img/sneakers/1.jpg)" }} className="cartItemImg"></div>
+
+              <div className="mr-20 flex">
+                <p className="mb-5">Nike mens sneakers</p>
+                <b>500 $</b>
+              </div>
+              <img className="removeBtn" src="/img/btn-remove.svg" alt="Remove" />
+
+            </div>
+
+            <div className="cartItem d-flex align-center mb-20">
+              <div style={{ backgroundImage: "url(/img/sneakers/1.jpg)" }} className="cartItemImg"></div>
+
+              <div className="mr-20 flex">
+                <p className="mb-5">Nike mens sneakers</p>
+                <b>500 $</b>
+              </div>
+              <img className="removeBtn" src="/img/btn-remove.svg" alt="Remove" />
+
+            </div>
+
+
+            <ul className="cartTotalBlock">
+              <li >
+                <span>Total:</span>
+                <div></div>
+                <b>1100 $</b>
+              </li>
+              <li >
+                <span>Tax 5%:</span>
+                <div></div>
+                <b> 70 $</b>
+              </li>
+            </ul>
+            <button>Place your order</button>
+          </div>
+
+
+
+
+        </div>
+      </div>
+
+
+
+
+
+
+
+      <header className="d-flex justify-between align-center p-40">
         <div className="d-flex align-center">
-          <img width={40} height={40} src="/img/logo.png" />
+          <img width={40} height={40} src="/img/logo.png" alt="Logotype" />
           <svg />
-          <div className="headerInfo">
-            <h3 className="text-uppercase"> React Sneakers</h3>
+          <div >
+            <h3 className="text-uppercase "> React Sneakers</h3>
             <p className="opacity-5">Shop for the best sneakers</p>
           </div>
         </div>
@@ -38,12 +99,19 @@ function App() {
         <div className="d-flex">
 
           <div className="card">
+
+            <div className="favorite">
+              <img src="/img/unliked.svg" alt="Unliked" />
+            </div>
+
+
+            {/* <img src="/img/liked.svg" alt="Unliked" /> */}
             <img width={113} height={112} src="/img/sneakers/1.jpg" alt="" />
             <h5>Nike mens sneakers</h5>
             <div className="d-flex justify-between align-center">
               <div className="d-flex  flex-column ">
                 <p>Prise:</p>
-                <b>7 990 $</b>
+                <b> 500 $</b>
               </div>
               <button className="button">
                 <img width={11} height={11} src="/img/plus.svg" alt="Plus" />
@@ -59,7 +127,7 @@ function App() {
             <div className="d-flex justify-between align-center">
               <div className="d-flex  flex-column ">
                 <p>Prise:</p>
-                <b>7 990 $</b>
+                <b> 790 $</b>
               </div>
               <button className="button">
                 <img width={11} height={11} src="/img/plus.svg" alt="Plus" />
