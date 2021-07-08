@@ -8,7 +8,7 @@ function App() {
 
 
 
-      <div className="overlay">
+      <div style={{ display: 'none' }} className="overlay">
         <div className="drawer">
 
           <h2 className="d-flex justify-between mb-30">Cart
@@ -128,7 +128,6 @@ function App() {
           </div>
 
 
-
           <div className="card">
             <img width={113} height={112} src="/img/sneakers/2.jpg" alt="" />
             <h5>Nike mens sneakers</h5>
@@ -142,6 +141,7 @@ function App() {
               </button>
             </div>
           </div>
+
         </div>
 
       </div>
