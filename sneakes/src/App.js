@@ -11,7 +11,9 @@ function App() {
       <div className="overlay">
         <div className="drawer">
 
-          <h2 className="mb-30">Cart</h2>
+          <h2 className="d-flex justify-between mb-30">Cart
+            <img className="removeBtn cu-p" src="/img/btn-remove.svg" alt="Remove" />
+          </h2>
 
 
           <div className="items">
@@ -50,7 +52,13 @@ function App() {
                   <b> 70 $</b>
                 </li>
               </ul>
-              <button>Place your order</button>
+
+
+              <button className="greenButton">Place your order
+                <img src="/img/arrow.svg" alt="Arrow" />
+              </button>
+
+
             </div>
 
 
@@ -61,9 +69,6 @@ function App() {
 
         </div>
       </div>
-
-
-
 
 
 
