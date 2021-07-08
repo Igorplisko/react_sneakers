@@ -37,20 +37,23 @@ function App() {
 
             </div>
 
+            <div className="cartTotalBlock">
+              <ul >
+                <li >
+                  <span>Total:</span>
+                  <div></div>
+                  <b>1100 $</b>
+                </li>
+                <li >
+                  <span>Tax 5%:</span>
+                  <div></div>
+                  <b> 70 $</b>
+                </li>
+              </ul>
+              <button>Place your order</button>
+            </div>
 
-            <ul className="cartTotalBlock">
-              <li >
-                <span>Total:</span>
-                <div></div>
-                <b>1100 $</b>
-              </li>
-              <li >
-                <span>Tax 5%:</span>
-                <div></div>
-                <b> 70 $</b>
-              </li>
-            </ul>
-            <button>Place your order</button>
+
           </div>
 
 
