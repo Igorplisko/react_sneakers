@@ -1,9 +1,19 @@
 // import './App.css';
-import Card from './components/Card'
+import Card from './components/Card/Card'
 import Header from './components/Header'
 import CartDrawer from './components/CartDrawer'
 
+
+const arr = [
+  { name: "Nike mens sneakers Air max", price: '150$', imageUrl: "/img/sneakers/1.jpg" },
+  { name: "Nike mens sneakers Blazer", price: '170$', imageUrl: "/img/sneakers/2.jpg" },
+  { name: "Nike mens sneakers Mide Sueda", price: '145$', imageUrl: "/img/sneakers/3.jpg" },
+  { name: "Nike mens sneakers Just original", price: '160$', imageUrl: "/img/sneakers/4.jpg" },
+  { name: "Nike mens sneakers Sport", price: '137$', imageUrl: "/img/sneakers/5.jpg" }
+]
+
 function App() {
+
   return (
     <div className="wrapper clear">
       <CartDrawer />
@@ -17,10 +27,21 @@ function App() {
           </div>
         </div>
         <div className="d-flex">
-          <Card />
-          <Card />
-          <Card />
-          <Card />
+          {/* <Card title={"Nike mens sneakers Air max"} price={140} imageUrl="/img/sneakers/1.jpg" />
+          <Card title={"Nike mens sneakers Blazer"} price={170} imageUrl="/img/sneakers/2.jpg" /> */}
+
+          {/* <Card /> */}
+
+          {arr.map((obj) => (
+            <Card
+              title={obj.name}
+              price={obj.price}
+              imageUrl={obj.imageUrl}
+              onClickPlus={() => console.log(obj)} />
+
+          ))}
+
+
 
         </div>
       </div>
