@@ -14,8 +14,12 @@ const arr = [
 
 function App() {
 
+
   return (
     <div className="wrapper clear">
+
+
+
       <CartDrawer />
       <Header />
       <div className="content p-40">
@@ -28,7 +32,7 @@ function App() {
         </div>
         <div className="d-flex">
           {/* <Card title={"Nike mens sneakers Air max"} price={140} imageUrl="/img/sneakers/1.jpg" />
-          <Card title={"Nike mens sneakers Blazer"} price={170} imageUrl="/img/sneakers/2.jpg" /> */}
+          <Card title={"Nike mens sneakers Blazer"} price={170} imageUrl="/img/sneakers/2.jpg" />
 
           {/* <Card /> */}
 
@@ -37,6 +41,7 @@ function App() {
               title={obj.name}
               price={obj.price}
               imageUrl={obj.imageUrl}
+
               onClickPlus={() => console.log(obj)} />
 
           ))}
