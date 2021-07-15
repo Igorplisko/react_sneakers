@@ -7,6 +7,10 @@ import CartDrawer from './components/CartDrawer'
 
 function App() {
   let [items, setItems] = React.useState([]);
+  const [cartItems, setCartItems] = React.useState([])
+  // const [favorites, setFavorites] = React.useState([]);
+  const [searchValue, setSearchValue] = React.useState('')
+
   const [cartOpened, setCartOpened] = React.useState(false)
 
 
@@ -20,12 +24,18 @@ function App() {
       });
   }, []);
 
+  const onAddToCart = (obj) => {
+    setCartItems([...cartItems, obj]);
+
+  }
+
+
 
 
   return (
     <div className="wrapper clear">
       {/* {cartOpened ? <CartDrawer onClose={() => setCartOpened(false)} /> : null} */}
-      {cartOpened && <CartDrawer onClose={() => setCartOpened(false)} />}
+      {cartOpened && <CartDrawer onClose={() => setCartOpened(false)} items={cartItems} />}
 
       <Header onClickCart={() => setCartOpened(true)} />
       <div className="content p-40">
@@ -42,11 +52,16 @@ function App() {
 
           {/* <Card /> */}
 
-          {items.map((obj) => (
+          {items.map((item, index) => (
             <Card
-              title={obj.name}
-              price={obj.price}
-              imageUrl={obj.imageUrl}
+              key={index}
+              title={item.name}
+              price={item.price}
+              imageUrl={item.imageUrl}
+              onFavorite={() => console.log('Add to bookmarks ')}
+              // onPlus={onAddToCart}
+              onPlus={onAddToCart}
+
             // onClick={() => console.log(obj)} 
             />
 
