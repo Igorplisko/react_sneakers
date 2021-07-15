@@ -4,11 +4,17 @@ import styles from './Card.module.scss'
 console.log(styles);
 
 function Card(props) {
+   const [isAdedd, setISAdded] = React.useState(false)
+
+   const onClickPlus = () => {
+      setISAdded(!isAdedd)
+   }
+
 
 
    return (
 
-      <div className={styles.card}>
+      < div className={styles.card} >
 
          <div className={styles.favorite}>
             <img src="/img/unliked.svg" alt="Unliked" />
@@ -21,14 +27,12 @@ function Card(props) {
          <div className="d-flex justify-between align-center">
             <div className="d-flex  flex-column ">
                <span>Price:</span>
-               <p>{props.price} </p>
+               <p>{props.price} $</p>
                <b>Somthing</b>
             </div>
-            <button className="button" onClick={props.onClickPlus}>
-               <img width={11} height={11} src="/img/plus.svg" alt="Plus" />
-            </button>
+            <img classNAme={styles.plus} onClick={onClickPlus} src={isAdedd ? "/img/btn-checked.svg" : "/img/btn-plus.svg"} alt="Plus" />
          </div>
-      </div>
+      </div >
 
    )
 }
