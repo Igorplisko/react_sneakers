@@ -47,7 +47,7 @@ function App() {
           <h1>All sneakers</h1>
           <div className="search-block d-flex">
             <img src="/img/search.svg" alt="Search" />
-            <input placeholder="Search..." {onChangeInputSearchInput} />
+            <input placeholder="Search..." onChange={onChangeInputSearchInput} />
           </div>
         </div>
         <div className="d-flex flex-wrap">
