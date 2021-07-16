@@ -30,7 +30,7 @@ function App() {
 
   const onChangeInputSearchInput = (event) => {
     console.log(event.target.value)
-    //setSearchValue()
+    setSearchValue(event.target.value)
 
   }
 
@@ -44,7 +44,7 @@ function App() {
       <Header onClickCart={() => setCartOpened(true)} />
       <div className="content p-40">
         <div className="d-flex align-center mb-40 justify-between">
-          <h1>All sneakers</h1>
+          <h1> {searchValue ? `Search by request! ${searchValue}` : 'All sneakers'} </h1>
           <div className="search-block d-flex">
             <img src="/img/search.svg" alt="Search" />
             <input placeholder="Search..." onChange={onChangeInputSearchInput} />
@@ -65,8 +65,6 @@ function App() {
               onFavorite={() => console.log('Add to bookmarks ')}
               // onPlus={onAddToCart}
               onPlus={onAddToCart}
-
-            // onClick={() => console.log(obj)} 
             />
 
           ))}
