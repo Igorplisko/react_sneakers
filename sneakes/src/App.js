@@ -25,10 +25,14 @@ function App() {
   }, []);
 
   const onAddToCart = (obj) => {
-    setCartItems([...cartItems, obj]);
-
+    setCartItems((prev) => [...prev, obj]);
   }
 
+  const onChangeInputSearchInput = (event) => {
+    console.log(event.target.value)
+    //setSearchValue()
+
+  }
 
 
 
@@ -43,7 +47,7 @@ function App() {
           <h1>All sneakers</h1>
           <div className="search-block d-flex">
             <img src="/img/search.svg" alt="Search" />
-            <input placeholder="Search..." />
+            <input placeholder="Search..." {onChangeInputSearchInput} />
           </div>
         </div>
         <div className="d-flex flex-wrap">
@@ -54,7 +58,7 @@ function App() {
 
           {items.map((item, index) => (
             <Card
-              key={index}
+              key={item.title}
               title={item.name}
               price={item.price}
               imageUrl={item.imageUrl}
