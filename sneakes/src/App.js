@@ -1,91 +1,151 @@
-import React from 'react'
-import axios from 'axios'
-// import './App.css';
-import Card from './components/Card/Card'
-import Header from './components/Header'
-import CartDrawer from './components/CartDrawer'
+import React from 'react';
+import { Route } from 'react-router-dom';
+import axios from 'axios';
+import Header from './components/Header';
+import Drawer from './components/Drawer';
+import AppContext from './context';
 
+import Home from './pages/Home';
+import Favorites from './pages/Favorites';
+import Orders from './pages/Orders';
 
 function App() {
-  let [items, setItems] = React.useState([]);
-  const [cartItems, setCartItems] = React.useState([])
-  // const [favorites, setFavorites] = React.useState([]);
-  const [searchValue, setSearchValue] = React.useState('')
-
-  const [cartOpened, setCartOpened] = React.useState(false)
-
+  const [items, setItems] = React.useState([]);
+  const [cartItems, setCartItems] = React.useState([]);
+  const [favorites, setFavorites] = React.useState([]);
+  const [searchValue, setSearchValue] = React.useState('');
+  const [cartOpened, setCartOpened] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {
-    axios.get('https://60ed8027a78dc700178adf66.mockapi.io/items').then((res) => {
-      setItems(res.data)
-    });
+    async function fetchData() {
+      try {
+        const [cartResponse, favoritesResponse, itemsResponse] = await Promise.all([
+          axios.get('https://60ed8027a78dc700178adf66.mockapi.io/cart'),
+          axios.get('https://60ed8027a78dc700178adf66.mockapi.io/favorites'),
+          axios.get('https://60ed8027a78dc700178adf66.mockapi.io/items'),
+        ]);
 
-    axios.get('https://60ed8027a78dc700178adf66.mockapi.io/cart').then((res) => {
-      setCartItems(res.data)
-    });
+        setIsLoading(false);
+        setCartItems(cartResponse.data);
+        setFavorites(favoritesResponse.data);
+        setItems(itemsResponse.data);
+      } catch (error) {
+        alert('Ошибка при запросе данных ;(');
+        console.error(error);
+      }
+    }
+
+    fetchData();
   }, []);
 
-
-  const onAddToCart = (obj) => {
-    axios.post('https://60ed8027a78dc700178adf66.mockapi.io/cart', obj)
-    setCartItems((prev) => [...prev, obj]);
+  const onAddToCart = async (obj) => {
+    try {
+      const findItem = cartItems.find((item) => Number(item.parentId) === Number(obj.id));
+      if (findItem) {
+        setCartItems((prev) => prev.filter((item) => Number(item.parentId) !== Number(obj.id)));
+        await axios.delete(`https://60ed8027a78dc700178adf66.mockapi.io/cart/${findItem.id}`);
+      } else {
+        setCartItems((prev) => [...prev, obj]);
+        const { data } = await axios.post('https://60ed8027a78dc700178adf66.mockapi.io/cart', obj);
+        setCartItems((prev) =>
+          prev.map((item) => {
+            if (item.parentId === data.parentId) {
+              return {
+                ...item,
+                id: data.id,
+              };
+            }
+            return item;
+          }),
+        );
+      }
+    } catch (error) {
+      alert('Ошибка при добавлении в корзину');
+      console.error(error);
+    }
   };
 
-  const onChangeInputSearchInput = (event) => {
-    // console.log(event.target.value)
-    setSearchValue(event.target.value)
-
-  }
-
   const onRemoveItem = (id) => {
-    // axios.delete('https://60ed8027a78dc700178adf66.mockapi.io/cart${id}')
-    setCartItems((prev) => prev.filter(item => item.id !== id));
-  }
+    try {
+      axios.delete(`https://60ed8027a78dc700178adf66.mockapi.io/cart/${id}`);
+      setCartItems((prev) => prev.filter((item) => Number(item.id) !== Number(id)));
+    } catch (error) {
+      alert('Ошибка при удалении из корзины');
+      console.error(error);
+    }
+  };
 
+  const onAddToFavorite = async (obj) => {
+    try {
+      if (favorites.find((favObj) => Number(favObj.id) === Number(obj.id))) {
+        axios.delete(`https://60ed8027a78dc700178adf66.mockapi.io/favorites/${obj.id}`);
+        setFavorites((prev) => prev.filter((item) => Number(item.id) !== Number(obj.id)));
+      } else {
+        const { data } = await axios.post(
+          'https://60ed8027a78dc700178adf66.mockapi.io/favorites',
+          obj,
+        );
+        setFavorites((prev) => [...prev, data]);
+      }
+    } catch (error) {
+      alert('Не удалось добавить в фавориты');
+      console.error(error);
+    }
+  };
 
+  const onChangeSearchInput = (event) => {
+    setSearchValue(event.target.value);
+  };
+
+  const isItemAdded = (id) => {
+    return cartItems.some((obj) => Number(obj.parentId) === Number(id));
+  };
 
   return (
-    <div className="wrapper clear">
-      {/* {cartOpened ? <CartDrawer onClose={() => setCartOpened(false)} /> : null} */}
-      {cartOpened && <CartDrawer onClose={() => setCartOpened(false)} items={cartItems} onRemove={onRemoveItem} />}
+    <AppContext.Provider
+      value={{
+        items,
+        cartItems,
+        favorites,
+        isItemAdded,
+        onAddToFavorite,
+        onAddToCart,
+        setCartOpened,
+        setCartItems,
+      }}>
+      <div className="wrapper clear">
+        <Drawer
+          items={cartItems}
+          onClose={() => setCartOpened(false)}
+          onRemove={onRemoveItem}
+          opened={cartOpened}
+        />
 
-      <Header onClickCart={() => setCartOpened(true)} />
-      <div className="content p-40">
-        <div className="d-flex align-center mb-40 justify-between">
-          <h1> {searchValue ? `Search by request! ${searchValue}` : 'All sneakers'} </h1>
-          <div className="search-block d-flex">
-            <img src="/img/search.svg" alt="Search" />
-            {searchValue && < img onClick={() => setSearchValue('')} className="clear cu-p" src="/img/btn-remove.svg" alt="Clear" />}
-            <input placeholder="Search..." onChange={onChangeInputSearchInput} value={searchValue} />
-          </div>
-        </div>
-        <div className="d-flex flex-wrap">
-          {/* <Card title={"Nike mens sneakers Air max"} price={140} imageUrl="/img/sneakers/1.jpg" />
-          <Card title={"Nike mens sneakers Blazer"} price={170} imageUrl="/img/sneakers/2.jpg" />
+        <Header onClickCart={() => setCartOpened(true)} />
 
-          {/* <Card /> */}
+        <Route path="" exact>
+          <Home
+            items={items}
+            cartItems={cartItems}
+            searchValue={searchValue}
+            setSearchValue={setSearchValue}
+            onChangeSearchInput={onChangeSearchInput}
+            onAddToFavorite={onAddToFavorite}
+            onAddToCart={onAddToCart}
+            isLoading={isLoading}
+          />
+        </Route>
 
-          {items
-            .filter(item => item.title.toLowerCase().includes(searchValue))
-            .map((item, index) => (
-              <Card
-                key={index}
-                title={item.title}
-                price={item.price}
-                imageUrl={item.imageUrl}
-                onFavorite={() => console.log('Add to bookmarks ')}
-                // onPlus={onAddToCart}
-                onPlus={onAddToCart}
-              />
+        <Route path="favorites" exact>
+          <Favorites />
+        </Route>
 
-            ))}
-
-
-
-        </div>
+        <Route path="orders" exact>
+          <Orders />
+        </Route>
       </div>
-      ...
-    </div >
+    </AppContext.Provider>
   );
 }
 
@@ -143,4 +203,51 @@ export default App;
 //     "imageUrl": "/img/sneakers/8.jpg"
 //   }
 
+// ]
+
+
+
+
+// [
+
+//   {
+//     "title": "Nike men sneakers Air max",
+//     "price": 150,
+//     "imageUrl": "/img/sneakers/1.jpg"
+//   },
+//   {
+//     "title": "Nike men sneakers Blazer",
+//     "price": 170,
+//     "imageUrl": "/img/sneakers/2.jpg"
+//   },
+//   {
+//     "title": "Nike men sneakers 2-18",
+//     "price": 145,
+//     "imageUrl": "/img/sneakers/3.jpg"
+//   },
+//   {
+//     "title": "Nike mens sneakers Just original",
+//     "price": 160,
+//     "imageUrl": "/img/sneakers/4.jpg"
+//   },
+//   {
+//     "title": "Nike mens sneakers Sport",
+//     "price": 137,
+//     "imageUrl": "/img/sneakers/5.jpg"
+//   },
+//   {
+//     "title": "Nike mens sneakers Nike Kyrie 7",
+//     "price": 167,
+//     "imageUrl": "/img/sneakers/6.jpg"
+//   },
+//   {
+//     "title": "Nike mens sneaker X",
+//     "price": 127,
+//     "imageUrl": "/img/sneakers/7.jpg"
+//   },
+//   {
+//     "title": "Nike mens sneakers leBro",
+//     "price": 181,
+//     "imageUrl": "/img/sneakers/8.jpg"
+//   }
 // ]
